@@ -24,7 +24,7 @@
 
 /* Thanks for trying my very very small library, it isn't ifnished yet. Here are the next things I plan to implement:
     - repeat() function that will return a concated string
-    - make prepeat() accept a string instead of an array
+    - make printRepeat() accept a string instead of an array
     - add some debugging functions (to print a variable quickly per example) */
 
 #include <stdio.h>
@@ -32,14 +32,8 @@
 
 #include "quickArray.h"
 
-#define ROWSEPARATOR  '-'
-#define COLUMNSEPARATOR  '|'
-
-int getIntLen(int number);
-int metaBoard (int row, int column, int board[row][column]);
-void prepeat(int times, char charToRepeat);
-int lineLenght (int row, int column, int board[row][column]);
-void printf_array(int row, int column, int board[row][column]);
+#define ROWS_EPARATOR  '-'
+#define COLUMN_SEPARATOR  '|'
 
 
 /* int main(void)           FOR DEBBUGING PURPOSES ONLY
@@ -52,21 +46,21 @@ void printf_array(int row, int column, int board[row][column]);
 void printf_array(int row, int column, int board[row][column])
 {
     int maxNbrLen = metaBoard(row, column, board);
-    char rowSeparator = ROWSEPARATOR;
-    char columnSeparator = COLUMNSEPARATOR;
+    char rowSeparator = ROW_SEPARATOR;
+    char columnSeparator = COLUMN_SEPARATOR;
     int i = 0 ; 
     int j = 0;
 
     printf("\ni/j");
     for (int j = 0; j < column; j++)
     {
-        prepeat(maxNbrLen , ' ') ; // Prints he good number of spaces BEFORE the number of the column
+        printRepeat(maxNbrLen , ' ') ; // Prints he good number of spaces BEFORE the number of the column
         printf("%d  ", j );
     }
 
     // This block handdles the formatting of the very first line of ROWSEPARATORs
     printf("\n   ");
-    prepeat(maxNbrLen * column + (3 * column + 1), rowSeparator);
+    printRepeat(maxNbrLen * column + (3 * column + 1), rowSeparator);
     printf("\n");
 
     //  This first loop will go through every row of the array (or will execute only once if it is NOT a 2D array)
@@ -77,12 +71,12 @@ void printf_array(int row, int column, int board[row][column])
         // The second loop go trough every column (of every row thnks to the first loop) and displays the value of each entry in a formatted fashion
         for (j = 0; j < column; j++)
         {
-            prepeat(maxNbrLen - getIntLen(board[i][j]) + 1, ' ') ; // Put the good number of spaces BEFORE the number so the the units are aligned
+            printRepeat(maxNbrLen - getIntLen(board[i][j]) + 1, ' ') ; // Put the good number of spaces BEFORE the number so the the units are aligned
             printf("%d %c", board[i][j], columnSeparator); 
         }
     // Put ROWSEPARATORs between each row
         printf("\n   ");
-        prepeat(maxNbrLen * column + (3 * column + 1), rowSeparator);
+        printRepeat(maxNbrLen * column + (3 * column + 1), rowSeparator);
         printf("\n");
     }
     printf("\n");
@@ -93,7 +87,6 @@ void printf_array(int row, int column, int board[row][column])
 int metaBoard (int row, int column, int board[row][column])
 {
     int maxNbrLen = 0;
-    int lineLen = 0;
     int maxLineLen = 0;
 
 // We go trough the whole array in order to determine the number with the most digits. It will be used to print the good number of spaced before every number
@@ -103,19 +96,13 @@ int metaBoard (int row, int column, int board[row][column])
         {
             if ( (getIntLen(board[w][x])) > maxNbrLen)
                 maxNbrLen = getIntLen(board[w][x]);
-
-            lineLen = lineLen + getIntLen(board[w][x]);
         }
-
-        if (lineLen > maxLineLen)
-            maxLineLen = lineLen ;
-
-        lineLen = 0;
     }
 
     return maxNbrLen;
 }
 
+// Get the Length of a given int
 int getIntLen (int number)
 {
     int intLen;
@@ -143,7 +130,8 @@ int getIntLen (int number)
     return intLen;
 }
 
-void prepeat(int times, char charToRepeat)
+// Print a char x times
+void printRepeat(int times, char charToRepeat)
 {
     for (int l = 0; l < times; l++)
         printf("%c", charToRepeat);
